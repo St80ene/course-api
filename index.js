@@ -2,39 +2,25 @@ const express = require('express');
 const app = express();
 require('dotenv').config();
 const DB = require('./src/model/index');
-const Course = require('./src/model/courseModel');
 const home = require('./home');
-
-const port = process.env.PORT;
 
 app.use(home);
 
-//creating a collection
-// function courseDocument() {
-// 	return Course.create({
-// 		name: 'NodeJs Tutorial',
-// 		author: 'Mosh Hammedani',
-// 		isPublished: true,
-// 	});
-// }
+new DB('mongodb://localhost/main').connect();
 
-//console logging the saved collection
-// courseDocument().then(() =>
-// 	console.log('Course saved to database successfully')).catch(err => console.error(err));
+//Creating a course
+const newCourse = new DB('')
+	.createCourse('C# Tutorial', 'Kingsley', true)
+	.then((result) => console.log(result, '\n Course saved successfully'));
+return newCourse;
 
-new DB('mongodb://localhost/main').connect().then((_) => {
-	app.listen(port, () => {
-		console.log(`app running on port ${port}...`);
-		// new DB('').course.create({
-		// 	name: 'Angular Tutorial-video',
-		// 	author: 'Mosh',
-		// 	isPublished: false,
-		// });
-		const courseList = new DB('').course
-			.find({ author: 'Mosh Hammedani' })
-			.limit(10)
-			.sort({ name: 1 })
-			.then((result) => console.log(result));
-		return courseList;
-	});
-});
+
+//Updating a course
+const updatedCourse = new DB('')
+	.updateCourse('604cecb9461833115a3889f6', 'author', 'Danny')
+	.then((result) => console.log(result));
+return updatedCourse;
+
+//Deleting a course
+const deleteCourse = new DB('').removeCourse('604cdb3074066f7669a49d99');
+return deleteCourse;
