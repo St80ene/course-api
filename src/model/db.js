@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-// const Course = require('./courseModel');
 
 class DB {
 	constructor(url) {
@@ -10,21 +9,35 @@ class DB {
 	async connect() {
 		return mongoose
 			.connect(this.url)
-			.then(() => console.log(`Connected to database successfully...`));
-    }
-    
-    async createCourse(name, author, isPublished) {
-	try {
-		const course = await new DB('').course.create({
-			name,
-			author,
-			isPublished,
-		});
-		return course;
-	} catch (error) {
-		console.log(error);
+			.then(() => console.log(`Connected to MongoDB...`));
 	}
-}
+
+	async createCourse(name, author, isPublished, category, tag) {
+		try {
+			const course = await new DB('').course.create({
+				name,
+				author,
+				isPublished,
+				category,tag
+			});
+		
+			return course;
+		} catch (error) {
+			// console.log(error.message);
+			for (const key in error.errors) {
+				console.log(error.errors[key].message);
+			}
+		}
+	}
+
+	async getCourse() {
+		try {
+			const course = await new DB('').course.find()
+			return {data: course}
+		} catch (error) {
+			console.error(error.message);
+		}
+	}
 
 	async updateCourse(id, property, value) {
 		try {
